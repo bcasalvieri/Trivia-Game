@@ -2,6 +2,8 @@
 var correct = 0;
 var counter = 5 * 60 * 1000;
 var timer;
+var quizRunning = false;
+var currentTime = "5:00";
 
 console.log(counter)
 
@@ -126,18 +128,23 @@ function run() {
 
   // restart interval
   timer = setInterval(decrement, 1000);
+
+  // print current time to page
+  $("#timer").text(`Time Remaining: ${currentTime}`);
+
+  // hide start-quiz button
+  $("#start-quiz").hide()
 }
 
 // create decrement function to lower counter by one every second
 function decrement() {
-  counter--;
+  counter = counter - 1000;
 
   // convert the counter to time and print to page
-  var currentTime = timeConverter(counter);
-
+  currentTime = timeConverter(counter);
 
   // print to page
-  $("#timer").text(currentTime);
+  $("#timer").text(`Time Remaining: ${currentTime}`);
 
   // when counter === 0, run stop function
   if (counter === 0) {
@@ -148,8 +155,8 @@ function decrement() {
 }
 
 function timeConverter(t) {
-  var minutes = Math.floor(t / 60);
-  var seconds = t - (minutes * 60);
+  var minutes = Math.floor((t / 1000) / 60);
+  var seconds = (t / 1000) - (minutes * 60);
 
   if (seconds < 10) {
     seconds = "0" + seconds;
@@ -157,12 +164,11 @@ function timeConverter(t) {
 
   if (minutes === 0) {
     minutes = "00"
-  }
-  else if (minutes < 10) {
-    minutes = "0" + minutes;
-  }
+  };
+
   return minutes + ":" + seconds
-}
+
+};
 
 // Create quiz creation function for each question in the quiz bank
 function renderQuiz() {
@@ -175,8 +181,8 @@ function renderQuiz() {
     var $question = $('<div>').addClass('form-group');
 
     // add question to div
-    var $label = $('<h4>')
-      .text(quizBank.question)
+    var $label = $("<h4>")
+      .text(question.question)
       .appendTo($question);
 
     // shuffle answer choices
@@ -212,8 +218,6 @@ function renderQuiz() {
       // add whole radio button to question
       $choice.appendTo($question);
 
-      // add radio button choice to question
-      $choice.appendTo($question);
     };
 
     // add question to page

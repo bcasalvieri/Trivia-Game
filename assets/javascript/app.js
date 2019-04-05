@@ -3,118 +3,125 @@ var correct = 0;
 var count = 5 * 60 * 1000;
 
 // create quiz bank
-var quizBank = {
-  question1: {
+var quizBank = [
+  {
     question: "Which of the following is not a primary color?",
-    answers: [
+    choices: [
       "green",
       "blue",
       "yellow",
       "red"
     ],
-    correct: "blue",
+    answer: "blue",
+    userAnswer: ""
   },
-  question2: {
+  {
     question: "What is the answer of 10 / (2 + 3) * 6?",
-    answers: [
+    choices: [
       12,
       23,
       48,
       0.33
     ],
-    correct: 12
+    answer: 12,
+    userAnswer: ""
   },
-  question3: {
+  {
     question: "Which of the following vegetables is botanically considered a fruit?",
-    answers: [
+    choices: [
       "carrot",
       "tomato",
       "broccoli",
       "celery"
     ],
-    correct: "tomato"
+    answer: "tomato",
+    userAnswer: ""
   },
-  question4: {
+  {
     question: "How many teeth does the average adult human have?",
-    answers: [
+    choices: [
       32,
       26,
       18,
       24
     ],
-    correct: 32
+    answer: 32,
+    userAnswer: ""
   },
-  question5: {
+  {
     question: "Which of the following films was directed by James Cameron?",
-    answers: [
+    choices: [
       "Ready Player One",
       "The Terminator",
       "Big Fish",
       "Adventures of Tintin"
     ],
-    correct: "The Terminator"
+    answer: "The Terminator",
+    userAnswer: ""
   },
-  question6: {
+  {
     question: "Which of the drinks below traditionally has more than two ingredients?",
-    answers: [
+    choices: [
       "Screwdriver",
       "Mimosa",
       "Old Fashioned",
       "Martini"
     ],
-    correct: "Old Fashioned"
+    answer: "Old Fashioned",
+    userAnswer: ""
   },
-  question7: {
+  {
     question: "What is in the center of a Blow-Pop?",
-    answers: [
+    choices: [
       "Chocolate",
       "Gum",
       "Caramel",
       "The stick"
     ],
-    correct: "Gum"
+    answer: "Gum",
+    userAnswer: ""
   },
-  question8: {
+  {
     question: "What is Mark Twain's real name?",
-    answers: [
+    choices: [
       "Samuel Clemens",
       "Jackson Andrews",
       "Benjamin Davis",
       "Donald Smith"
     ],
-    correct: "Samuel Clemens"
+    answer: "Samuel Clemens",
+    userAnswer: ""
   },
-  question9: {
+  {
     question: "What did the crocodile swallow in Peter Pan?",
-    answers: [
+    choices: [
       "Alarm clock",
       "Captain Hook's hook",
       "Fairy dust",
       "Rufio"
     ],
-    correct: "Alarm clock"
+    answer: "Alarm clock",
+    userAnswer: ""
   },
-  question10: {
+  {
     question: "Which is the largest ocean?",
-    answers: [
+    choices: [
       "Atlantic",
       "Pacific",
       "Indian",
       "Arctic"
     ],
-    correct: "Pacific"
+    answer: "Pacific",
+    userAnswer: ""
   }
-}
+]
 
 // This is huge for looping through an object
-Object.keys(quizBank).forEach(function() {
-  console.log(key, quizBank[key].answers)
-})
+// Object.keys(quizBank).forEach(function(key) {
+//   console.log(key, quizBank[key].answers)
+// })
 
-// Create a start function
-  // reset correct and incorrect answers
-  // clear content from html
-  // print quiz form to html
+
   // clear interval
   // restart interval
     // function = decrement
@@ -125,45 +132,83 @@ Object.keys(quizBank).forEach(function() {
   // print count to page
   // if count === 0, run grade quiz function
 
-// Create quiz creation function for each question in the quiz bank
-  // create a $quiz <form> element
-  // create a $question <div>
+// STARTER CODE FROM ALEX!
+// function to print all questions to page
+function renderQuestions() {
+  // clear out form
+  $("#quiz-form").empty();
 
-  // QUESTION
-  // create a <p> tag
-  // add class "question"
-  // add text from question in object
-  // append to $question div
-
-  // ANSWERS
-  // create an $answerChoices div
-  
-  // for each answer in array
-    // create an $answer div
-    // add class "form-check"
-    // create an <input> element
-    // add class "form-check-input"
-    // add attribute
-      // "type" with a value of "radio"
-      // "id"" with a value of "answer[i]"
-      // "name" with a value of "answer"
-
-    // create a <label> element
-    // add class "form-check-label"
-    // add attribute "for" with a value of "answer[i]"
-    // if answers[i] === correct, add attribute "data-truth" with value "true"
-    // add text from answers[i]
-    // append $answer to $answerChoices
+  // Loop through questions array
+  quizBank.forEach(function (question, index) {
+    // create div to hold question
+    var $question = $("<div>").addClass("form-group");
+    console.log(question.question)
     
-    // append $answerChoices to $question
-    // append $question to $quiz
-    // append $quiz to #main-content div on HTML
+    // add question to div
+    var $label = $("<h4>")
+      .text(question.question)
+      .appendTo($question);
 
-// Create submit button 
-  // create an <input> element
-  // add attribute "type" with a value of "submit"
-  // add classes "btn btn-primary"
-  // append to $quiz
+    // shuffle choices
+    question.choices = question.choices.sort(function() {
+      return .5 - Math.random();
+    });
+
+    // create a loop to iterate through question's choices and create radio buttons for each one
+    for (var i = 0; i < question.choices.length; i++) {
+      // create a div for choice and add bootstrap classes
+      var $choice = $('<div>');
+      $choice.addClass('form-check form-check-inline');
+      
+      // create an input tag for the radio button
+      var $radio = $('<input>');
+
+      // add attributes to provide the answer choice
+      // the "name" attribute is super important, all radio buttons per question need to have the same "name" so they know which question it applies to
+      $radio
+        .attr({
+          type: "radio",
+          value: question.choices[i],
+          name: index,
+          class: "form-check-input"
+        })
+        .appendTo($choice);
+      
+      // create label to actually print the choice to the page
+      var $choiceLabel = $('<label>');
+      $choiceLabel
+        .text(question.choices[i])
+        .addClass('form-check-label')
+        .appendTo($choice);
+      
+      // add whole radio button choice to question
+      $choice.appendTo($question);
+    }
+    // when done making all of the choices, add whole question to the page
+    $("#quiz-form").append($question);
+  });
+}
+
+// create on "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
+$("#quiz-form").on("change", ".form-check-input", function() {
+  console.log(this);
+  
+  // GET question index out of "name" attribute so we know what question you answered
+  var questionIndex = $(this).attr("name");
+
+  console.log(questions[questionIndex]);
+
+  // get value out of radio button you selected
+  var answer = $(this).val();
+
+  // set answer to question's userAnswer property
+  questions[questionIndex].userAnswer = answer;
+  
+});
+
+renderQuestions();
+
+
 
 // Create stop function
   // Check attribute "data-truth", if val() === true --> correct++

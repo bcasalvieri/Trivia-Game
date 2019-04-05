@@ -1,6 +1,9 @@
 // create variables
 var correct = 0;
-var count = 5 * 60 * 1000;
+var counter = 5 * 60 * 1000;
+var timer;
+
+console.log(counter)
 
 // create quiz bank
 var quizBank = [
@@ -116,55 +119,80 @@ var quizBank = [
   }
 ]
 
-// This is huge for looping through an object
-// Object.keys(quizBank).forEach(function(key) {
-//   console.log(key, quizBank[key].answers)
-// })
-
-
+// create run function
+function run() {
   // clear interval
+  clearInterval(timer);
+
   // restart interval
-    // function = decrement
-    // run every 1 sec
+  timer = setInterval(decrement, 1000);
+}
 
-// Create a decrement function
-  // subtract 1 from count
-  // print count to page
-  // if count === 0, run grade quiz function
+// create decrement function to lower counter by one every second
+function decrement() {
+  counter--;
 
-// STARTER CODE FROM ALEX!
-// function to print all questions to page
-function renderQuestions() {
-  // clear out form
-  $("#quiz-form").empty();
+  // convert the counter to time and print to page
+  var currentTime = timeConverter(counter);
 
-  // Loop through questions array
+
+  // print to page
+  $("#timer").text(currentTime);
+
+  // when counter === 0, run stop function
+  if (counter === 0) {
+    stop();
+
+    alert(`You ran out of time!`);
+  }
+}
+
+function timeConverter(t) {
+  var minutes = Math.floor(t / 60);
+  var seconds = t - (minutes * 60);
+
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  };
+
+  if (minutes === 0) {
+    minutes = "00"
+  }
+  else if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  return minutes + ":" + seconds
+}
+
+// Create quiz creation function for each question in the quiz bank
+function renderQuiz() {
+  // clear #quiz-form div
+  $('#quiz-form').empty();
+  
+  // loop through quizBank array
   quizBank.forEach(function (question, index) {
     // create div to hold question
-    var $question = $("<div>").addClass("form-group");
-    console.log(question.question)
-    
+    var $question = $('<div>').addClass('form-group');
+
     // add question to div
-    var $label = $("<h4>")
-      .text(question.question)
+    var $label = $('<h4>')
+      .text(quizBank.question)
       .appendTo($question);
 
-    // shuffle choices
+    // shuffle answer choices
     question.choices = question.choices.sort(function() {
       return .5 - Math.random();
     });
 
-    // create a loop to iterate through question's choices and create radio buttons for each one
+    // create a loop to iterate through quizBank's choices and create radio buttons for each one
     for (var i = 0; i < question.choices.length; i++) {
       // create a div for choice and add bootstrap classes
-      var $choice = $('<div>');
-      $choice.addClass('form-check form-check-inline');
-      
-      // create an input tag for the radio button
+      var $choice = $('<div>').addClass('form-check form-check-inline');
+
+      // create an input tag for radio buttons
       var $radio = $('<input>');
 
-      // add attributes to provide the answer choice
-      // the "name" attribute is super important, all radio buttons per question need to have the same "name" so they know which question it applies to
+      // add attributes to radio buttons
       $radio
         .attr({
           type: "radio",
@@ -173,42 +201,53 @@ function renderQuestions() {
           class: "form-check-input"
         })
         .appendTo($choice);
-      
-      // create label to actually print the choice to the page
+
+      // create label to print choice to page
       var $choiceLabel = $('<label>');
       $choiceLabel
         .text(question.choices[i])
         .addClass('form-check-label')
         .appendTo($choice);
-      
-      // add whole radio button choice to question
+
+      // add whole radio button to question
       $choice.appendTo($question);
-    }
-    // when done making all of the choices, add whole question to the page
-    $("#quiz-form").append($question);
+
+      // add radio button choice to question
+      $choice.appendTo($question);
+    };
+
+    // add question to page
+    $question.appendTo($("#quiz-form"));
+
   });
-}
+};
 
-// create on "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
+// create a "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
 $("#quiz-form").on("change", ".form-check-input", function() {
-  console.log(this);
-  
-  // GET question index out of "name" attribute so we know what question you answered
-  var questionIndex = $(this).attr("name");
-
-  console.log(questions[questionIndex]);
+  // Get question index out of "name" attribute so we know what question you answered
+  var questionIndex = $(this).attr("name")
 
   // get value out of radio button you selected
-  var answer = $(this).val();
+  var answer = $(this).val()
 
-  // set answer to question's userAnswer property
-  questions[questionIndex].userAnswer = answer;
-  
+  // set answer to quizBank's userAnswer property
+  quizBank[questionIndex].userAnswer = answer
+
 });
 
-renderQuestions();
+$("#start-quiz").on("click", function() {
+  renderQuiz();
+  run();
+})
 
+ 
 
+// Create submit button 
+  // create an <input> element
+  // add attribute "type" with a value of "submit"
+  // add classes "btn btn-primary"
+  // append to $quiz
+  
 
 // Create stop function
   // Check attribute "data-truth", if val() === true --> correct++

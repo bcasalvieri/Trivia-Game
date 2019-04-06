@@ -1,11 +1,10 @@
 // create variables
 var correct = 0;
+var incorrect = 0;
 var counter = 5 * 60 * 1000;
 var timer;
 var quizRunning = false;
 var currentTime = "5:00";
-
-console.log(counter)
 
 // create quiz bank
 var quizBank = [
@@ -23,12 +22,12 @@ var quizBank = [
   {
     question: "What is the answer of 10 / (2 + 3) * 6?",
     choices: [
-      12,
-      23,
-      48,
-      0.33
+      "12",
+      "23",
+      "48",
+      "0.33"
     ],
-    answer: 12,
+    answer: "12",
     userAnswer: ""
   },
   {
@@ -45,12 +44,12 @@ var quizBank = [
   {
     question: "How many teeth does the average adult human have?",
     choices: [
-      32,
-      26,
-      18,
-      24
+      "32",
+      "26",
+      "18",
+      "24"
     ],
-    answer: 32,
+    answer: "32",
     userAnswer: ""
   },
   {
@@ -133,7 +132,7 @@ function run() {
   $("#timer").text(`Time Remaining: ${currentTime}`);
 
   // hide start-quiz button
-  $("#start-quiz").hide()
+  $("#start-button").hide()
 }
 
 // create decrement function to lower counter by one every second
@@ -230,7 +229,7 @@ function renderQuiz() {
   $submitBtn
     .attr({
       type: "submit",
-      id: "submit-button"
+      id: "submit-button",
       class: "btn btn-primary"
     })
     .text('Submit')
@@ -240,6 +239,8 @@ function renderQuiz() {
 
 // create a "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
 $("#quiz-form").on("change", ".form-check-input", function() {
+
+  console.log(quizBank)
   // Get question index out of "name" attribute so we know what question you answered
   var questionIndex = $(this).attr("name")
 
@@ -251,15 +252,42 @@ $("#quiz-form").on("change", ".form-check-input", function() {
 
 });
 
-$("#start-quiz").on("click", function() {
+console.log(quizBank.userAnswer)
+
+function gradeQuiz() {
+  quizBank.forEach(function (userAnswer, index) {
+    // check to see if userAnswer === answer
+    if (userAnswer === answer) {
+      correct++;
+      console.log(correct);
+    } else {
+      incorrect++;
+      console.log(incorrect);
+    };
+
+    // create div to hold results
+    var $results = $("<div>")
+    
+    // create h2 for correct and incorrect
+    var $correct = $("<h2>").text(`Correct: ${correct}`);
+    var $incorrect = $("<h2>").text(`Incorrect: ${incorrect}`);
+
+    $results.append($correct, $incorrect);
+
+    $("#results").append($results)
+    
+  });
+};
+
+$("#start-button").on("click", function() {
   renderQuiz();
   run();
-})
+});
 
 $("#submit-button").on("click", function() {
-  
-
-})
+  stop();
+  gradeQuiz();
+});
 
  
 

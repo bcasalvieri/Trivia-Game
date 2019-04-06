@@ -3,7 +3,6 @@ var correct = 0;
 var incorrect = 0;
 var counter = 5 * 60 * 1000;
 var timer;
-var quizRunning = false;
 var currentTime = "5:00";
 
 // create quiz bank
@@ -16,7 +15,7 @@ var quizBank = [
       "Yellow",
       "Red"
     ],
-    answer: "Blue",
+    answer: "Green",
     userAnswer: ""
   },
   {
@@ -125,8 +124,18 @@ function run() {
   // clear interval
   clearInterval(timer);
 
+  // empty timer div
+  $("#timer").empty();
+
   // restart interval
   timer = setInterval(decrement, 1000);
+
+  // empty results div
+  $("#results").empty()
+
+  // reset correct and incorrect
+  correct = 0;
+  incorrect = 0;
 
   // print current time to page
   $("#timer").text(`Time Remaining: ${currentTime}`);
@@ -148,8 +157,7 @@ function decrement() {
   // when counter === 0, run stop function
   if (counter === 0) {
     gradeQuiz();
-
-  }
+  };
 }
 
 function timeConverter(t) {
@@ -251,36 +259,42 @@ $("#quiz-form").on("change", ".form-check-input", function() {
 });
 
 function gradeQuiz() {
-  quizBank.forEach(function (userAnswer, index) {
-    // check to see if userAnswer === answer
-    if (userAnswer === quizBank.answer) {
+  // check to see if userAnswer === answer
+  for (var i = 0; i < quizBank.length; i++) {
+    var $userAnswer = quizBank[i].userAnswer;
+    var $answer = quizBank[i].answer;
+
+    if ($userAnswer === $answer) {
       correct++;
-    } else {
+    }
+    else {
       incorrect++;
-    };
+    }; 
+  };
 
-    // create div to hold results
-    var $results = $("<div>")
+  // create div to hold results
+  var $results = $("<div>")
+  
+  // create h2 for correct and incorrect
+  var $correct = $("<h2>").text(`Correct: ${correct}`);
+  var $incorrect = $("<h2>").text(`Incorrect: ${incorrect}`);
+
+  $results.append($correct, $incorrect);
+
+  $("#results").append($results)
     
-    // create h2 for correct and incorrect
-    var $correct = $("<h2>").text(`Correct: ${correct}`);
-    var $incorrect = $("<h2>").text(`Incorrect: ${incorrect}`);
-
-    $results.append($correct, $incorrect);
-
-    $("#results").append($results)
-    
-  });
 };
 
 $("#start-button").on("click", function() {
-  renderQuiz();
   run();
+  renderQuiz();
 });
 
 $(document).on("click", "#submit-button", function(event) {
   event.preventDefault();
   gradeQuiz();
-  $("#start-button").show()
-  $("#quiz-form").hide()
+  clearInterval(timer);
+  $("#start-button").show();
+  $("#timer").empty();
+  $("#quiz-form").empty()
 });

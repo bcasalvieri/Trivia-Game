@@ -12,12 +12,12 @@ var quizBank = [
   {
     question: "Which of the following is not a primary color?",
     choices: [
-      "green",
-      "blue",
-      "yellow",
-      "red"
+      "Green",
+      "Blue",
+      "Yellow",
+      "Red"
     ],
-    answer: "blue",
+    answer: "Blue",
     userAnswer: ""
   },
   {
@@ -34,12 +34,12 @@ var quizBank = [
   {
     question: "Which of the following vegetables is botanically considered a fruit?",
     choices: [
-      "carrot",
-      "tomato",
-      "broccoli",
-      "celery"
+      "Carrot",
+      "Tomato",
+      "Broccoli",
+      "Celery"
     ],
-    answer: "tomato",
+    answer: "Tomato",
     userAnswer: ""
   },
   {
@@ -181,7 +181,7 @@ function renderQuiz() {
     var $question = $('<div>').addClass('form-group');
 
     // add question to div
-    var $label = $("<h4>")
+    var $label = $("<h5>")
       .text(question.question)
       .appendTo($question);
 
@@ -224,6 +224,18 @@ function renderQuiz() {
     $question.appendTo($("#quiz-form"));
 
   });
+
+  // create a submit button
+  var $submitBtn = $('<button>')
+  $submitBtn
+    .attr({
+      type: "submit",
+      id: "submit-button"
+      class: "btn btn-primary"
+    })
+    .text('Submit')
+    .appendTo($("#quiz-form"));
+
 };
 
 // create a "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
@@ -242,6 +254,11 @@ $("#quiz-form").on("change", ".form-check-input", function() {
 $("#start-quiz").on("click", function() {
   renderQuiz();
   run();
+})
+
+$("#submit-button").on("click", function() {
+  
+
 })
 
  

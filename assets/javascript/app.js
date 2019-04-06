@@ -1,9 +1,8 @@
 // create variables
 var correct = 0;
 var incorrect = 0;
-var counter = 5 * 60 * 1000;
-var timer;
-var currentTime = "5:00";
+var counter = 2 * 60;
+var currentTime;
 
 // create quiz bank
 var quizBank = [
@@ -137,8 +136,11 @@ function run() {
   correct = 0;
   incorrect = 0;
 
+  // reset counter
+  counter = 2 * 60
+
   // print current time to page
-  $("#timer").text(`Time Remaining: ${currentTime}`);
+  $("#timer").text(`Time Remaining: 2:00`);
 
   // hide start-quiz button
   $("#start-button").hide()
@@ -146,19 +148,24 @@ function run() {
 
 // create decrement function to lower counter by one every second
 function decrement() {
-  counter = counter - 1000;
+  counter--;
 
   // convert the counter to time and print to page
-  currentTime = timeConverter(counter);
+  var $counter = counter * 1000;
+  currentTime = timeConverter($counter);
 
   // print to page
   $("#timer").text(`Time Remaining: ${currentTime}`);
 
-  // when counter === 0, run stop function
+  // if counter runs out, run gradeQuiz function
   if (counter === 0) {
     gradeQuiz();
+    clearInterval(timer);
+    $("#start-button").show();
+    $("#timer").empty();
+    $("#quiz-form").empty();
   };
-}
+};
 
 function timeConverter(t) {
   var minutes = Math.floor((t / 1000) / 60);
@@ -184,11 +191,11 @@ function renderQuiz() {
   // loop through quizBank array
   quizBank.forEach(function (question, index) {
     // create div to hold question
-    var $question = $('<div>').addClass('form-group');
+    var $question = $('<div>').addClass('form-group my-4');
 
     // add question to div
     var $label = $("<h5>")
-      .text(question.question)
+      .text((index + 1) + ") " + question.question)
       .appendTo($question);
 
     // shuffle answer choices
@@ -236,7 +243,7 @@ function renderQuiz() {
   $submitBtn
     .attr({
       id: "submit-button",
-      class: "btn btn-primary"
+      class: "btn btn-success btn-lg col-3 my-4"
     })
     .text('Submit')
     .appendTo($("#quiz-form"));
@@ -282,7 +289,6 @@ function gradeQuiz() {
   $results.append($correct, $incorrect);
 
   $("#results").append($results)
-    
 };
 
 $("#start-button").on("click", function() {

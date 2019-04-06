@@ -1,0 +1,19 @@
+body {
+  margin: 25px 0;
+}
+
+#timer {
+  color: red;
+}
+
+.form-check-label {
+  font-size: 1.15rem;
+}
+
+input[type=radio] {
+  transform:scale(1.25);
+}
+
+input {
+  margin-right: 20px;
+}

@@ -147,9 +147,8 @@ function decrement() {
 
   // when counter === 0, run stop function
   if (counter === 0) {
-    stop();
+    gradeQuiz();
 
-    alert(`You ran out of time!`);
   }
 }
 
@@ -228,7 +227,6 @@ function renderQuiz() {
   var $submitBtn = $('<button>')
   $submitBtn
     .attr({
-      type: "submit",
       id: "submit-button",
       class: "btn btn-primary"
     })
@@ -251,8 +249,6 @@ $("#quiz-form").on("change", ".form-check-input", function() {
   quizBank[questionIndex].userAnswer = answer
 
 });
-
-console.log(quizBank.userAnswer)
 
 function gradeQuiz() {
   quizBank.forEach(function (userAnswer, index) {
@@ -284,44 +280,7 @@ $("#start-button").on("click", function() {
   run();
 });
 
-$("#submit-button").on("click", function() {
-  stop();
+$(document).on("click", "#start-button", function(event) {
+  event.preventDefault();
   gradeQuiz();
 });
-
- 
-
-// Create submit button 
-  // create an <input> element
-  // add attribute "type" with a value of "submit"
-  // add classes "btn btn-primary"
-  // append to $quiz
-  
-
-// Create stop function
-  // Check attribute "data-truth", if val() === true --> correct++
-  // Calculate incorrect --> 10 - correct
-  // Create $results <div>
-  
-  // CORRECT
-  // Create $correct <h2> element
-  // Add text that reads `Correct: ${correct}`
-  // Append $correct to $results
-  
-  // INCORRECT
-  // Create $incorrect <h2> element
-  // Add text that reads `Incorrect: ${correct}`
-  // Append $incorrect to $results
-
-  // MESSAGE
-  // Create $message <h3> element
-  // if correct >= 7,
-    // add text "You know a lot of useless random trivia"
-    // append $message to $results
-  // else
-    // add text "You have some things to learn"
-    // append $message to $results
-
-// If count === 0, run stop function
-// If submit button clicked, run stop function
-  

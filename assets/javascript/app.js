@@ -3,6 +3,7 @@ var correct = 0;
 var incorrect = 0;
 var counter = 2 * 60;
 var currentTime;
+var $choice;
 
 // create quiz bank
 var quizBank = [
@@ -207,7 +208,7 @@ function renderQuiz() {
     // create a loop to iterate through quizBank's choices and create radio buttons for each one
     for (var i = 0; i < question.choices.length; i++) {
       // create a div for choice and add bootstrap classes
-      var $choice = $('<div>').addClass('form-check form-check-inline');
+      $choice = $('<div>').addClass('form-check form-check-inline');
 
       // create an input tag for radio buttons
       var $radio = $('<input>');
@@ -244,7 +245,7 @@ function renderQuiz() {
   $submitBtn
     .attr({
       id: "submit-button",
-      class: "btn btn-success btn-lg col-3 my-4"
+      class: "btn btn-success btn-lg col-12 col-md-4 col-lg-3 my-4"
     })
     .text('Submit')
     .appendTo($("#quiz-form"));
@@ -320,4 +321,15 @@ $(document).on("click", "#submit-button", function(event) {
   $("#start-button").show();
   $("#timer").empty();
   $("#quiz-form").empty()
+});
+
+// trying to make answer choices stack on screen size < 1024px
+$(window).on('load, resize', function() {
+  var viewportWidth = $(window).width();
+  if (viewportWidth < 1024) {
+    // change $choice class
+    $choice
+      .removeClass("form-check form-check-inline")
+      .addClass("form-check")
+  };
 });

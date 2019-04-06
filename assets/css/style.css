@@ -1,25 +1,25 @@
 body {
   margin: 25px 0;
   font-family: 'Ledger', serif;
-  background-image: url(../images/stripes-light.png);
+  background-image: url(../images/concrete-texture.png);
   background-position: cover;
-  color: #344C80
+  color: #802D2A
 }
 
 header {
-  border-bottom: 3px solid #91A4CC;
+  border-bottom: 3px solid #FFA4A1;
 }
 
 h1 {
   font-family: 'Nixie One', cursive;
   font-size: 3.5rem;
   font-weight: bold;
-  color: #6998FF;
-  text-shadow: 3px 3px 8px #888888;
+  color: #CC4843;
+  text-shadow: 5px 5px 8px #888888;
 }
 
 #timer {
-  color: red;
+  color: #FF5B54;
 }
 
 .question {

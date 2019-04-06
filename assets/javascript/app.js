@@ -208,7 +208,7 @@ function renderQuiz() {
     // create a loop to iterate through quizBank's choices and create radio buttons for each one
     for (var i = 0; i < question.choices.length; i++) {
       // create a div for choice and add bootstrap classes
-      $choice = $('<div>').addClass('form-check form-check-inline');
+      $choice = $('<div>').addClass('form-check');
 
       // create an input tag for radio buttons
       var $radio = $('<input>');
@@ -290,22 +290,6 @@ function gradeQuiz() {
 
   $results.append($correct, $incorrect);
 
-
-  if (correct >= 7) {
-    var $message = $("<h2>")
-    $message
-      .addClass("font-italic mt-5")
-      .text(`You know a lot of random and useless information!`)
-      .appendTo($results);
-  }
-  else {
-    var $message = $("<h2>")
-    $message
-      .addClass("font-italic mt-5")
-      .text(`You have a lot to learn!`)
-      .appendTo($results);
-  }
-
   $("#results").append($results)
 };
 
@@ -321,15 +305,4 @@ $(document).on("click", "#submit-button", function(event) {
   $("#start-button").show();
   $("#timer").empty();
   $("#quiz-form").empty()
-});
-
-// trying to make answer choices stack on screen size < 1024px
-$(window).on('load, resize', function() {
-  var viewportWidth = $(window).width();
-  if (viewportWidth < 1024) {
-    // change $choice class
-    $choice
-      .removeClass("form-check form-check-inline")
-      .addClass("form-check")
-  };
 });

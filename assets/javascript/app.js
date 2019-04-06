@@ -1,7 +1,7 @@
 // create variables
 var correct = 0;
 var incorrect = 0;
-var counter = 2 * 60;
+var counter = 3 * 60;
 var currentTime;
 var $choice;
 
@@ -19,14 +19,14 @@ var quizBank = [
     userAnswer: ""
   },
   {
-    question: "What is the answer of 10 / (2 + 3) * 6?",
+    question: "If there are 12 inches in a foot and 3 feet in a yard, how many feet do you have?",
     choices: [
+      "2",
+      "3",
       "12",
-      "23",
-      "48",
-      "0.33"
+      "Am I supposed to know this?!"
     ],
-    answer: "12",
+    answer: "2",
     userAnswer: ""
   },
   {
@@ -54,10 +54,10 @@ var quizBank = [
   {
     question: "Which of the following films was directed by James Cameron?",
     choices: [
-      "Ready Player One",
+      "Bad Boys",
       "The Terminator",
-      "Big Fish",
-      "Adventures of Tintin"
+      "Friday",
+      "Space Jam"
     ],
     answer: "The Terminator",
     userAnswer: ""
@@ -116,6 +116,61 @@ var quizBank = [
     ],
     answer: "Pacific",
     userAnswer: ""
+  },
+  {
+    question: "If you pass the second-place runner in a race, what place are you in?",
+    choices: [
+      "First",
+      "Second",
+      "Third",
+      "I would never run in a race!"
+    ],
+    answer: "Second",
+    userAnswer: ""
+  },
+  {
+    question: "The person who did the voice for Yoda also is the voice for which other character?",
+    choices: [
+      "Miss Piggy",
+      "Elmo",
+      "Elmer Fudd",
+      "Count Dracula"
+    ],
+    answer: "Miss Piggy",
+    userAnswer: ""
+  },
+  {
+    question: "Who was the first civilian to own a Hummer?",
+    choices: [
+      "Arnold Schwarzenegger",
+      "LeBron James",
+      "Bill Gates",
+      "Jay-Z"
+    ],
+    answer: "Arnold Schwarzenegger",
+    userAnswer: ""
+  },
+  {
+    question: "Who was the first President to be born at a hospital?",
+    choices: [
+      "Jimmy Carter",
+      "Ronald Reagan",
+      "Gerald Ford",
+      "Richard Nixon"
+    ],
+    answer: "Jimmy Carter",
+    userAnswer: ""
+  },
+  {
+    question: "If you walk south from Detroit, where would you end up first?",
+    choices: [
+      "Canada",
+      "Ohio",
+      "Indiana",
+      "Pennsylvania"
+    ],
+    answer: "Canada",
+    userAnswer: ""
   }
 ]
 
@@ -138,10 +193,10 @@ function run() {
   incorrect = 0;
 
   // reset counter
-  counter = 2 * 60
+  counter = 3 * 60
 
   // print current time to page
-  $("#timer").text(`Time Remaining: 2:00`);
+  $("#timer").text(`Time Remaining: 3:00`);
 
   // hide start-quiz button
   $("#start-button").hide()

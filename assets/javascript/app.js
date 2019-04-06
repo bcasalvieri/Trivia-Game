@@ -253,12 +253,10 @@ $("#quiz-form").on("change", ".form-check-input", function() {
 function gradeQuiz() {
   quizBank.forEach(function (userAnswer, index) {
     // check to see if userAnswer === answer
-    if (userAnswer === answer) {
+    if (userAnswer === quizBank.answer) {
       correct++;
-      console.log(correct);
     } else {
       incorrect++;
-      console.log(incorrect);
     };
 
     // create div to hold results
@@ -280,7 +278,9 @@ $("#start-button").on("click", function() {
   run();
 });
 
-$(document).on("click", "#start-button", function(event) {
+$(document).on("click", "#submit-button", function(event) {
   event.preventDefault();
   gradeQuiz();
+  $("#start-button").show()
+  $("#quiz-form").hide()
 });

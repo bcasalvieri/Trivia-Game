@@ -196,6 +196,7 @@ function renderQuiz() {
     // add question to div
     var $label = $("<h5>")
       .text((index + 1) + ") " + question.question)
+      .addClass("question")
       .appendTo($question);
 
     // shuffle answer choices
@@ -280,13 +281,29 @@ function gradeQuiz() {
   };
 
   // create div to hold results
-  var $results = $("<div>")
+  var $results = $("<div>").addClass("mb-5")
   
   // create h2 for correct and incorrect
   var $correct = $("<h2>").text(`Correct: ${correct}`);
   var $incorrect = $("<h2>").text(`Incorrect: ${incorrect}`);
 
   $results.append($correct, $incorrect);
+
+
+  if (correct >= 7) {
+    var $message = $("<h2>")
+    $message
+      .addClass("font-italic mt-5")
+      .text(`You know a lot of random and useless information!`)
+      .appendTo($results);
+  }
+  else {
+    var $message = $("<h2>")
+    $message
+      .addClass("font-italic mt-5")
+      .text(`You have a lot to learn!`)
+      .appendTo($results);
+  }
 
   $("#results").append($results)
 };

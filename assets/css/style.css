@@ -45,3 +45,19 @@ input[type=radio] {
 input {
   margin-right: 20px;
 }
+
+#start-button:hover span {
+  display: none;
+}
+
+#start-button:hover:before {
+  content: "Don't Be Nervous!";
+}
+
+#submit-button:hover span {
+  display: none
+}
+
+#submit-button:hover:before {
+  content: "Are you sure?"
+}

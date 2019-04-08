@@ -4,9 +4,10 @@ var incorrect = 0;
 var counter = 3 * 60;
 var currentTime;
 var $choice;
+var quizBank = [];
 
 // create quiz bank
-var quizBank = [
+quizBank = [
   {
     question: "Which of the following is not a primary color?",
     choices: [
@@ -302,8 +303,12 @@ function renderQuiz() {
       id: "submit-button",
       class: "btn btn-success btn-lg col-12 col-md-4 col-lg-3 my-4"
     })
+  
+  var $submitBtnSpan = $('<span>')
     .text('Submit')
-    .appendTo($("#quiz-form"));
+    .appendTo($submitBtn);
+
+  $submitBtn.appendTo($("#quiz-form"));
 
 };
 
@@ -342,8 +347,10 @@ function gradeQuiz() {
   // create h2 for correct and incorrect
   var $correct = $("<h2>").text(`Correct: ${correct}`);
   var $incorrect = $("<h2>").text(`Incorrect: ${incorrect}`);
+  var percent = Math.round((correct / quizBank.length) * 100);
+  var $percent = $("<h2>").text(`Percent Correct: ${percent}%`)
 
-  $results.append($correct, $incorrect);
+  $results.append($correct, $incorrect, $percent);
 
   $("#results").append($results)
 };

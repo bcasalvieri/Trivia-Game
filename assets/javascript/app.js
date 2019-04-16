@@ -338,6 +338,16 @@ function gradeQuiz() {
     }
     else {
       incorrect++;
+
+      // print questions user got wrong and correct answer
+      var $question = $("<h5>").text((i + 1) + ") " + quizBank[i].question);
+      var $incorrectAnswer = $("<p>")
+        .addClass("incorrect-answer")
+        .text(`Your Answer: ${$userAnswer}`);
+      var $correctAnswer = $("<p>")
+        .addClass("correct-answer")
+        .text(`Correct Answer: ${$answer}`);
+      $("#results").append($question, $incorrectAnswer, $correctAnswer);
     }; 
   };
 
@@ -352,7 +362,7 @@ function gradeQuiz() {
 
   $results.append($correct, $incorrect, $percent);
 
-  $("#results").append($results)
+  $("#results").prepend($results)
 };
 
 $("#start-button").on("click", function() {

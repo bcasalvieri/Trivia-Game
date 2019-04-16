@@ -61,3 +61,24 @@ input {
 #submit-button:hover:before {
   content: "Are you sure?"
 }
+
+h5,
+.incorrect-answer,
+.correct-answer {
+  margin: 0;
+}
+
+h5 {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.incorrect-answer,
+.correct-answer {
+  font-size: 1.25rem;
+}
+
+.correct-answer {
+  color: green;
+  margin-bottom: 20px;
+}

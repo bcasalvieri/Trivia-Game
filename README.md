@@ -13,5 +13,4 @@ The user has three minutes to answer 15 random and useless trivia questions.
 - jQuery
 
 ## Future Improvements
-- Show user correct answers for questions they got wrong
 - Switch radio buttons for buttons with answers inside

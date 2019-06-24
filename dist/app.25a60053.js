@@ -127,27 +127,27 @@ exports.Quiz = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Question = function Question(question, choices, answer) {
+var Question = function Question(id, question, choices, answer) {
   _classCallCheck(this, Question);
 
-  this.question = question, this.choices = choices, this.answer = answer, this.userAnswer = "";
+  this.id = id, this.question = question, this.choices = choices, this.answer = answer, this.userAnswer = "";
 };
 
-var question1 = new Question("Which of the following is not a primary color?", ["Green", "Blue", "Yellow", "Red"], "Green");
-var question2 = new Question("If there are 12 inches in a foot and 3 feet in a yard, how many feet do you have?", ["2", "3", "12", "Am I supposed to know this?!"], "2");
-var question3 = new Question("Which of the following vegetables is botanically considered a fruit?", ["Carrot", "Tomato", "Broccoli", "Celery"], "Tomato");
-var question4 = new Question("How many teeth does the average adult human have?", ["32", "26", "18", "24"], "32");
-var question5 = new Question("Which of the following films was directed by James Cameron?", ["Bad Boys", "The Terminator", "Friday", "Space Jam"], "The Terminator");
-var question6 = new Question("Which of the drinks below traditionally has more than two ingredients?", ["Screwdriver", "Mimosa", "Old Fashioned", "Martini"], "Old Fashioned");
-var question7 = new Question("What is in the center of a Blow-Pop?", ["Chocolate", "Gum", "Caramel", "The stick"], "Gum");
-var question8 = new Question("What is Mark Twain's real name?", ["Samuel Clemens", "Jackson Andrews", "Benjamin Davis", "Donald Smith"], "Samuel Clemens");
-var question9 = new Question("What did the crocodile swallow in Peter Pan?", ["Alarm clock", "Captain Hook's hook", "Fairy dust", "Rufio"], "Alarm clock");
-var question10 = new Question("Which is the largest ocean?", ["Atlantic", "Pacific", "Indian", "Arctic"], "Pacific");
-var question11 = new Question("If you pass the second-place runner in a race, what place are you in?", ["First", "Second", "Third", "I would never run in a race!"], "Second");
-var question12 = new Question("The person who did the voice for Yoda also is the voice for which other character?", ["Miss Piggy", "Elmo", "Elmer Fudd", "Count Dracula"], "Miss Piggy");
-var question13 = new Question("Who was the first civilian to own a Hummer?", ["Arnold Schwarzenegger", "LeBron James", "Bill Gates", "Jay-Z"], "Arnold Schwarzenegger");
-var question14 = new Question("Who was the first President to be born at a hospital?", ["Jimmy Carter", "Ronald Reagan", "Gerald Ford", "Richard Nixon"], "Jimmy Carter");
-var question15 = new Question("If you walk south from Detroit, where would you end up first?", ["Canada", "Ohio", "Indiana", "Pennsylvania"], "Canada");
+var question1 = new Question(1, "Which of the following is not a primary color?", ["Green", "Blue", "Yellow", "Red"], "Green");
+var question2 = new Question(2, "If there are 12 inches in a foot and 3 feet in a yard, how many feet do you have?", ["2", "3", "12", "Am I supposed to know this?!"], "2");
+var question3 = new Question(3, "Which of the following vegetables is botanically considered a fruit?", ["Carrot", "Tomato", "Broccoli", "Celery"], "Tomato");
+var question4 = new Question(4, "How many teeth does the average adult human have?", ["32", "26", "18", "24"], "32");
+var question5 = new Question(5, "Which of the following films was directed by James Cameron?", ["Bad Boys", "The Terminator", "Friday", "Space Jam"], "The Terminator");
+var question6 = new Question(6, "Which of the drinks below traditionally has more than two ingredients?", ["Screwdriver", "Mimosa", "Old Fashioned", "Martini"], "Old Fashioned");
+var question7 = new Question(7, "What is in the center of a Blow-Pop?", ["Chocolate", "Gum", "Caramel", "The stick"], "Gum");
+var question8 = new Question(8, "What is Mark Twain's real name?", ["Samuel Clemens", "Jackson Andrews", "Benjamin Davis", "Donald Smith"], "Samuel Clemens");
+var question9 = new Question(9, "What did the crocodile swallow in Peter Pan?", ["Alarm clock", "Captain Hook's hook", "Fairy dust", "Rufio"], "Alarm clock");
+var question10 = new Question(10, "Which is the largest ocean?", ["Atlantic", "Pacific", "Indian", "Arctic"], "Pacific");
+var question11 = new Question(11, "If you pass the second-place runner in a race, what place are you in?", ["First", "Second", "Third", "I would never run in a race!"], "Second");
+var question12 = new Question(12, "The person who did the voice for Yoda also is the voice for which other character?", ["Miss Piggy", "Elmo", "Elmer Fudd", "Count Dracula"], "Miss Piggy");
+var question13 = new Question(13, "Who was the first civilian to own a Hummer?", ["Arnold Schwarzenegger", "LeBron James", "Bill Gates", "Jay-Z"], "Arnold Schwarzenegger");
+var question14 = new Question(14, "Who was the first President to be born at a hospital?", ["Jimmy Carter", "Ronald Reagan", "Gerald Ford", "Richard Nixon"], "Jimmy Carter");
+var question15 = new Question(15, "If you walk south from Detroit, where would you end up first?", ["Canada", "Ohio", "Indiana", "Pennsylvania"], "Canada");
 var Quiz = [question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11, question12, question13, question14, question15];
 exports.Quiz = Quiz;
 },{}],"assets/javascript/app.js":[function(require,module,exports) {
@@ -223,7 +223,7 @@ function renderQuiz() {
 
   questionBank.push(_questions.Quiz); // loop through quizBank array
 
-  questionBank.forEach(function (question, index) {
+  questionBank[0].forEach(function (question, index) {
     // create div to hold question
     var $question = $("<div>").addClass("form-group my-4"); // add question to div
 
@@ -267,39 +267,39 @@ function renderQuiz() {
 
 
 $("#quiz-form").on("change", ".form-check-input", function () {
-  console.log(quizBank); // Get question index out of "name" attribute so we know what question you answered
-
+  // Get question index out of "name" attribute so we know what question you answered
   var questionIndex = $(this).attr("name"); // get value out of radio button you selected
 
   var answer = $(this).val(); // set answer to quizBank's userAnswer property
 
-  quizBank[questionIndex].userAnswer = answer;
+  questionBank[0].userAnswer = answer;
 });
 
 function gradeQuiz() {
   // check to see if userAnswer === answer
-  for (var i = 0; i < quizBank.length; i++) {
-    var $userAnswer = quizBank[i].userAnswer;
-    var $answer = quizBank[i].answer;
+  questionBank[0].forEach(function (question) {
+    console.log(question);
+    var $userAnswer = question.userAnswer;
+    var $answer = question.answer;
 
     if ($userAnswer === $answer) {
       correct++;
     } else {
       incorrect++; // print questions user got wrong and correct answer
+      // var $question = $("<h5>").text(i + 1 + ") " + questionBank[i].question);
 
-      var $question = $("<h5>").text(i + 1 + ") " + quizBank[i].question);
+      var $question = $("<h5>").text("".concat(question.id, ") ").concat(question.question));
       var $incorrectAnswer = $("<p>").addClass("incorrect-answer").text("Your Answer: ".concat($userAnswer));
       var $correctAnswer = $("<p>").addClass("correct-answer").text("Correct Answer: ".concat($answer));
       $("#results").append($question, $incorrectAnswer, $correctAnswer);
     }
-  } // create div to hold results
-
+  }); // create div to hold results
 
   var $results = $("<div>").addClass("mb-5"); // create h2 for correct and incorrect
 
   var $correct = $("<h2>").text("Correct: ".concat(correct));
   var $incorrect = $("<h2>").text("Incorrect: ".concat(incorrect));
-  var percent = Math.round(correct / quizBank.length * 100);
+  var percent = Math.round(correct / questionBank.length * 100);
   var $percent = $("<h2>").text("Percent Correct: ".concat(percent, "%"));
   $results.append($correct, $incorrect, $percent);
   $("#results").prepend($results);
@@ -345,7 +345,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50559" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52343" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

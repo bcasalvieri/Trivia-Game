@@ -18,7 +18,7 @@ function run() {
   $("#timer").empty();
 
   // restart interval
-  const timer = setInterval(decrement, 1000);
+  let timer = setInterval(decrement, 1000);
 
   // empty results div
   $("#results").empty();
@@ -83,7 +83,7 @@ function renderQuiz() {
   questionBank.push(Quiz);
 
   // loop through quizBank array
-  questionBank.forEach(function(question, index) {
+  questionBank[0].forEach(function(question, index) {
     // create div to hold question
     var $question = $("<div>").addClass("form-group my-4");
 
@@ -147,7 +147,6 @@ function renderQuiz() {
 
 // create a "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
 $("#quiz-form").on("change", ".form-check-input", function() {
-  console.log(quizBank);
   // Get question index out of "name" attribute so we know what question you answered
   var questionIndex = $(this).attr("name");
 
@@ -155,14 +154,15 @@ $("#quiz-form").on("change", ".form-check-input", function() {
   var answer = $(this).val();
 
   // set answer to quizBank's userAnswer property
-  quizBank[questionIndex].userAnswer = answer;
+  questionBank[0].userAnswer = answer;
 });
 
 function gradeQuiz() {
   // check to see if userAnswer === answer
-  for (var i = 0; i < quizBank.length; i++) {
-    var $userAnswer = quizBank[i].userAnswer;
-    var $answer = quizBank[i].answer;
+  questionBank[0].forEach((question) => {
+    console.log(question)
+    var $userAnswer = question.userAnswer;
+    var $answer = question.answer;
 
     if ($userAnswer === $answer) {
       correct++;
@@ -170,7 +170,8 @@ function gradeQuiz() {
       incorrect++;
 
       // print questions user got wrong and correct answer
-      var $question = $("<h5>").text(i + 1 + ") " + quizBank[i].question);
+      // var $question = $("<h5>").text(i + 1 + ") " + questionBank[i].question);
+      var $question = $("<h5>").text(`${question.id}) ${question.question}`);
       var $incorrectAnswer = $("<p>")
         .addClass("incorrect-answer")
         .text(`Your Answer: ${$userAnswer}`);
@@ -179,7 +180,7 @@ function gradeQuiz() {
         .text(`Correct Answer: ${$answer}`);
       $("#results").append($question, $incorrectAnswer, $correctAnswer);
     }
-  }
+  })
 
   // create div to hold results
   var $results = $("<div>").addClass("mb-5");
@@ -187,7 +188,7 @@ function gradeQuiz() {
   // create h2 for correct and incorrect
   var $correct = $("<h2>").text(`Correct: ${correct}`);
   var $incorrect = $("<h2>").text(`Incorrect: ${incorrect}`);
-  var percent = Math.round((correct / quizBank.length) * 100);
+  var percent = Math.round((correct / questionBank.length) * 100);
   var $percent = $("<h2>").text(`Percent Correct: ${percent}%`);
 
   $results.append($correct, $incorrect, $percent);

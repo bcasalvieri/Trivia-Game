@@ -18,7 +18,7 @@ function run() {
   $("#timer").empty();
 
   // restart interval
-  timer = setInterval(decrement, 1000);
+  var timer = setInterval(decrement, 1000);
 
   // empty results div
   $("#results").empty();

@@ -130,7 +130,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Question = function Question(id, question, choices, answer) {
   _classCallCheck(this, Question);
 
-  this.id = id, this.question = question, this.choices = choices, this.answer = answer, this.userAnswer = "";
+  this.id = id;
+  this.question = question;
+  this.choices = choices;
+  this.answer = answer;
+  this.userAnswer = "";
 };
 
 var question1 = new Question(1, "Which of the following is not a primary color?", ["Green", "Blue", "Yellow", "Red"], "Green");
@@ -169,7 +173,7 @@ function run() {
 
   $("#timer").empty(); // restart interval
 
-  timer = setInterval(decrement, 1000); // empty results div
+  var timer = setInterval(decrement, 1000); // empty results div
 
   $("#results").empty(); // reset correct and incorrect
 

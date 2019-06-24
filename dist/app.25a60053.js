@@ -165,7 +165,8 @@ var incorrect = 0;
 var counter = 3 * 60;
 var currentTime;
 var $choice;
-var questionBank = _questions.Quiz; // create run function
+var questionBank = _questions.Quiz;
+var timer; // create run function
 
 function run() {
   // clear interval
@@ -173,7 +174,7 @@ function run() {
 
   $("#timer").empty(); // restart interval
 
-  var timer = setInterval(decrement, 1000); // empty results div
+  timer = setInterval(decrement, 1000); // empty results div
 
   $("#results").empty(); // reset correct and incorrect
 
@@ -223,10 +224,7 @@ function timeConverter(t) {
 
 function renderQuiz() {
   // clear #quiz-form div
-  $("#quiz-form").empty(); // add questions to question bank
-  // questionBank.push(Quiz);
-
-  console.log(questionBank); // loop through quizBank array
+  $("#quiz-form").empty(); // loop through quizBank array
 
   questionBank.forEach(function (question, index) {
     // create div to hold question

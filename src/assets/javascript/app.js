@@ -7,6 +7,7 @@ let counter = 3 * 60;
 let currentTime;
 let $choice;
 let questionBank = Quiz;
+let timer;
 
 
 // create run function
@@ -18,7 +19,7 @@ function run() {
   $("#timer").empty();
 
   // restart interval
-  var timer = setInterval(decrement, 1000);
+  timer = setInterval(decrement, 1000);
 
   // empty results div
   $("#results").empty();
@@ -78,10 +79,6 @@ function timeConverter(t) {
 function renderQuiz() {
   // clear #quiz-form div
   $("#quiz-form").empty();
-
-  // add questions to question bank
-  // questionBank.push(Quiz);
-  console.log(questionBank)
 
   // loop through quizBank array
   questionBank.forEach(function(question, index) {

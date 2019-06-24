@@ -1,0 +1,86 @@
+body {
+  margin: 3vw 0;
+  font-family: 'Ledger', serif;
+  background-image: url(/dust_scratches.d9e7e2c8.png);
+  background-position: cover;
+  color: #802D2A
+}
+
+header {
+  border-bottom: 3px solid #FFA4A1;
+}
+
+h1 {
+  font-family: 'Nixie One', cursive;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #CC4843;
+  text-shadow: 5px 5px 8px #888888;
+}
+
+#timer {
+  color: #FF5B54;
+}
+
+.question {
+  font-weight: bold;
+}
+
+.form-check-label {
+  font-size: 1.15rem;
+}
+
+.form-check-inline {
+  margin-right: 25px;
+}
+
+.form-check-input {
+  margin-right: 8px !important;
+}
+
+input[type=radio] {
+  transform:scale(1.15);
+}
+
+input {
+  margin-right: 20px;
+}
+
+#start-button:hover span {
+  display: none;
+}
+
+#start-button:hover:before {
+  content: "Don't Be Nervous!";
+}
+
+#submit-button:hover span {
+  display: none
+}
+
+#submit-button:hover:before {
+  content: "Are you sure?"
+}
+
+h5,
+.incorrect-answer,
+.correct-answer {
+  margin: 0;
+}
+
+h5 {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.incorrect-answer,
+.correct-answer {
+  font-size: 1.25rem;
+}
+
+.correct-answer {
+  color: green;
+  margin-bottom: 20px;
+}
+
+/*# sourceMappingURL=/style.a11e3109.css.map */

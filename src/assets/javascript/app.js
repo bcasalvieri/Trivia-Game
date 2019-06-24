@@ -1,12 +1,12 @@
 import { Quiz } from "./questions";
 
 // create variables
-const correct = 0;
-const incorrect = 0;
-const counter = 3 * 60;
-const currentTime;
-const $choice;
-const questionBank = [];
+let correct = 0;
+let incorrect = 0;
+let counter = 3 * 60;
+let currentTime;
+let $choice;
+let questionBank = [];
 
 
 // create run function
@@ -15,10 +15,10 @@ function run() {
   clearInterval(timer);
 
   // empty timer div
-  $("timer").empty();
+  $("#timer").empty();
 
   // restart interval
-  timer = setInterval(decrement, 1000);
+  const timer = setInterval(decrement, 1000);
 
   // empty results div
   $("#results").empty();

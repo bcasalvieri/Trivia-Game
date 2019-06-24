@@ -6,7 +6,7 @@ let incorrect = 0;
 let counter = 3 * 60;
 let currentTime;
 let $choice;
-let questionBank = [];
+let questionBank = Quiz;
 
 
 // create run function
@@ -18,7 +18,7 @@ function run() {
   $("#timer").empty();
 
   // restart interval
-  let timer = setInterval(decrement, 1000);
+  timer = setInterval(decrement, 1000);
 
   // empty results div
   $("#results").empty();
@@ -80,10 +80,11 @@ function renderQuiz() {
   $("#quiz-form").empty();
 
   // add questions to question bank
-  questionBank.push(Quiz);
+  // questionBank.push(Quiz);
+  console.log(questionBank)
 
   // loop through quizBank array
-  questionBank[0].forEach(function(question, index) {
+  questionBank.forEach(function(question, index) {
     // create div to hold question
     var $question = $("<div>").addClass("form-group my-4");
 
@@ -154,12 +155,12 @@ $("#quiz-form").on("change", ".form-check-input", function() {
   var answer = $(this).val();
 
   // set answer to quizBank's userAnswer property
-  questionBank[0].userAnswer = answer;
+  questionBank[questionIndex].userAnswer = answer;
 });
 
 function gradeQuiz() {
   // check to see if userAnswer === answer
-  questionBank[0].forEach((question) => {
+  questionBank.forEach((question) => {
     console.log(question)
     var $userAnswer = question.userAnswer;
     var $answer = question.answer;
@@ -170,7 +171,6 @@ function gradeQuiz() {
       incorrect++;
 
       // print questions user got wrong and correct answer
-      // var $question = $("<h5>").text(i + 1 + ") " + questionBank[i].question);
       var $question = $("<h5>").text(`${question.id}) ${question.question}`);
       var $incorrectAnswer = $("<p>")
         .addClass("incorrect-answer")

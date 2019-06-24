@@ -161,7 +161,7 @@ var incorrect = 0;
 var counter = 3 * 60;
 var currentTime;
 var $choice;
-var questionBank = []; // create run function
+var questionBank = _questions.Quiz; // create run function
 
 function run() {
   // clear interval
@@ -169,7 +169,7 @@ function run() {
 
   $("#timer").empty(); // restart interval
 
-  var timer = setInterval(decrement, 1000); // empty results div
+  timer = setInterval(decrement, 1000); // empty results div
 
   $("#results").empty(); // reset correct and incorrect
 
@@ -220,10 +220,11 @@ function timeConverter(t) {
 function renderQuiz() {
   // clear #quiz-form div
   $("#quiz-form").empty(); // add questions to question bank
+  // questionBank.push(Quiz);
 
-  questionBank.push(_questions.Quiz); // loop through quizBank array
+  console.log(questionBank); // loop through quizBank array
 
-  questionBank[0].forEach(function (question, index) {
+  questionBank.forEach(function (question, index) {
     // create div to hold question
     var $question = $("<div>").addClass("form-group my-4"); // add question to div
 
@@ -272,12 +273,12 @@ $("#quiz-form").on("change", ".form-check-input", function () {
 
   var answer = $(this).val(); // set answer to quizBank's userAnswer property
 
-  questionBank[0].userAnswer = answer;
+  questionBank[questionIndex].userAnswer = answer;
 });
 
 function gradeQuiz() {
   // check to see if userAnswer === answer
-  questionBank[0].forEach(function (question) {
+  questionBank.forEach(function (question) {
     console.log(question);
     var $userAnswer = question.userAnswer;
     var $answer = question.answer;
@@ -286,7 +287,6 @@ function gradeQuiz() {
       correct++;
     } else {
       incorrect++; // print questions user got wrong and correct answer
-      // var $question = $("<h5>").text(i + 1 + ") " + questionBank[i].question);
 
       var $question = $("<h5>").text("".concat(question.id, ") ").concat(question.question));
       var $incorrectAnswer = $("<p>").addClass("incorrect-answer").text("Your Answer: ".concat($userAnswer));

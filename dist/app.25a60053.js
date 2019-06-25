@@ -164,28 +164,32 @@ var correct = 0;
 var incorrect = 0;
 var counter = 3 * 60;
 var currentTime;
-var $choice;
 var questionBank = _questions.Quiz;
-var timer; // create run function
+var timer; // grab elements on page
+
+var $timerDiv = document.querySelector("#timer");
+var $resultsDiv = document.querySelector("#results");
+var $startBtn = document.querySelector("#start-button");
+var $quizForm = document.querySelector("#quiz-form"); // create run function
 
 function run() {
   // clear interval
   clearInterval(timer); // empty timer div
 
-  $("#timer").empty(); // restart interval
+  $timerDiv.innerHTML = ""; // restart interval
 
   timer = setInterval(decrement, 1000); // empty results div
 
-  $("#results").empty(); // reset correct and incorrect
+  $resultsDiv.innerHTML = ""; // reset correct and incorrect
 
   correct = 0;
   incorrect = 0; // reset counter
 
   counter = 3 * 60; // print current time to page
 
-  $("#timer").text("Time Remaining: 3:00"); // hide start-quiz button
+  $timerDiv.textContent = "Time Remaining: 3:00"; // hide start-quiz button
 
-  $("#start-button").hide();
+  $startBtn.style.display = "none";
 } // create decrement function to lower counter by one every second
 
 
@@ -195,14 +199,14 @@ function decrement() {
   var $counter = counter * 1000;
   currentTime = timeConverter($counter); // print to page
 
-  $("#timer").text("Time Remaining: ".concat(currentTime)); // if counter runs out, run gradeQuiz function
+  $timerDiv.textContent = "Time Remaining: ".concat(currentTime); // if counter runs out, run gradeQuiz function
 
   if (counter === 0) {
     gradeQuiz();
     clearInterval(timer);
-    $("#start-button").show();
-    $("#timer").empty();
-    $("#quiz-form").empty();
+    $startBtn.style.display = "";
+    $timerDiv.innerHTML = "";
+    $quizForm.innerHTML = "";
   }
 }
 
@@ -224,13 +228,17 @@ function timeConverter(t) {
 
 function renderQuiz() {
   // clear #quiz-form div
-  $("#quiz-form").empty(); // loop through quizBank array
+  $quizForm.innerHTML = ""; // loop through quizBank array
 
   questionBank.forEach(function (question, index) {
     // create div to hold question
-    var $question = $("<div>").addClass("form-group my-4"); // add question to div
+    var $question = document.createElement("div");
+    $question.classList.add("form-group", "my-4"); // add question to div
 
-    var $label = $("<h5>").text(index + 1 + ") " + question.question).addClass("question").appendTo($question); // shuffle answer choices
+    var $label = document.createElement("h5");
+    $label.textContent = "".concat(index + 1, " ").concat(question.question);
+    $label.classList.add("question");
+    $question.appendChild($label); // shuffle answer choices
 
     question.choices = question.choices.sort(function () {
       return 0.5 - Math.random();
@@ -238,45 +246,51 @@ function renderQuiz() {
 
     for (var i = 0; i < question.choices.length; i++) {
       // create a div for choice and add bootstrap classes
-      $choice = $("<div>").addClass("form-check"); // create an input tag for radio buttons
+      var $choice = document.createElement("div");
+      $choice.classList.add("form-check"); // create an input tag for radio buttons
 
-      var $radio = $("<input>"); // add attributes to radio buttons
+      var $radio = document.createElement("input"); // add attributes to radio buttons
 
-      $radio.attr({
-        type: "radio",
-        value: question.choices[i],
-        name: index,
-        class: "form-check-input"
-      }).appendTo($choice); // create label to print choice to page
+      $radio.setAttribute("type", "radio");
+      $radio.setAttribute("value", "".concat(question.choices[i]));
+      $radio.setAttribute("name", "".concat(index));
+      $radio.classList.add("form-check-input"); // create label to print choice to page
 
-      var $choiceLabel = $("<label>");
-      $choiceLabel.text(question.choices[i]).addClass("form-check-label").appendTo($choice); // add whole radio button to question
+      var $choiceLabel = document.createElement("label");
+      $choiceLabel.textContent = "".concat(question.choices[i]);
+      $choiceLabel.classList.add("form-check-label");
+      $choice.append($radio, $choiceLabel); // add whole radio button to question
 
-      $choice.appendTo($question);
+      $question.appendChild($choice);
     } // add question to page
 
 
-    $question.appendTo($("#quiz-form"));
+    $quizForm.appendChild($question);
   }); // create a submit button
 
-  var $submitBtn = $("<button>");
-  $submitBtn.attr({
-    id: "submit-button",
-    class: "btn btn-success btn-lg col-12 col-md-4 col-lg-3 my-4"
-  });
-  var $submitBtnSpan = $("<span>").text("Submit").appendTo($submitBtn);
-  $submitBtn.appendTo($("#quiz-form"));
+  var $submitBtn = document.createElement("button");
+  $submitBtn.setAttribute("id", "submit-button");
+  $submitBtn.classList.add("btn", "btn-success", "btn-lg", "col-12", "col-md-4", "col-lg-3", "my-4");
+  $submitBtn.onclick = submitQuiz;
+  var $submitBtnSpan = document.createElement('span');
+  $submitBtnSpan.textContent = 'Submit';
+  $submitBtn.append($submitBtnSpan);
+  $quizForm.append($submitBtn);
+} // create function to check which radio btns are checked and update userAnswer in questionBank
+
+
+function checkedRadioBtns() {
+  for (var i = 0; i < $quizForm.length; i++) {
+    if ($quizForm[i].checked) {
+      var questionIdx = $quizForm[i].name;
+      var answer = $quizForm[i].value;
+      questionBank[questionIdx].userAnswer = answer;
+    }
+  }
 } // create a "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
 
 
-$("#quiz-form").on("change", ".form-check-input", function () {
-  // Get question index out of "name" attribute so we know what question you answered
-  var questionIndex = $(this).attr("name"); // get value out of radio button you selected
-
-  var answer = $(this).val(); // set answer to quizBank's userAnswer property
-
-  questionBank[questionIndex].userAnswer = answer;
-});
+$quizForm.addEventListener('change', checkedRadioBtns);
 
 function gradeQuiz() {
   // check to see if userAnswer === answer
@@ -290,35 +304,47 @@ function gradeQuiz() {
     } else {
       incorrect++; // print questions user got wrong and correct answer
 
-      var $question = $("<h5>").text("".concat(question.id, ") ").concat(question.question));
-      var $incorrectAnswer = $("<p>").addClass("incorrect-answer").text("Your Answer: ".concat($userAnswer));
-      var $correctAnswer = $("<p>").addClass("correct-answer").text("Correct Answer: ".concat($answer));
-      $("#results").append($question, $incorrectAnswer, $correctAnswer);
+      var $question = document.createElement('h5');
+      $question.textContent = "".concat(question.id, ") ").concat(question.question);
+      var $incorrectAnswer = document.createElement('p');
+      $incorrectAnswer.classList.add('incorrect-answer');
+      $incorrectAnswer.textContent = "Your Answer: ".concat($userAnswer);
+      var $correctAnswer = document.createElement('p');
+      $correctAnswer.classList.add('correct-answer');
+      $correctAnswer.textContent = "Correct Answer: ".concat($answer);
+      $resultsDiv.append($question, $incorrectAnswer, $correctAnswer);
     }
   }); // create div to hold results
 
-  var $results = $("<div>").addClass("mb-5"); // create h2 for correct and incorrect
+  var $results = document.createElement('div');
+  $results.classList.add('mb-5'); // create h2 for correct and incorrect
 
-  var $correct = $("<h2>").text("Correct: ".concat(correct));
-  var $incorrect = $("<h2>").text("Incorrect: ".concat(incorrect));
+  var $correct = document.createElement('h2');
+  $correct.textContent = "Correct: ".concat(correct);
+  var $incorrect = document.createElement('h2');
+  $incorrect.textContent = "Correct: ".concat(incorrect);
   var percent = Math.round(correct / questionBank.length * 100);
-  var $percent = $("<h2>").text("Percent Correct: ".concat(percent, "%"));
+  var $percent = document.createElement('h2');
+  $percent.textContent = "Percent Correct: ".concat(percent, "%");
   $results.append($correct, $incorrect, $percent);
-  $("#results").prepend($results);
+  $resultsDiv.insertBefore($results, $resultsDiv.firstChild);
 }
 
-$("#start-button").on("click", function () {
+$startBtn.addEventListener('click', function () {
   run();
   renderQuiz();
 });
-$(document).on("click", "#submit-button", function (event) {
+
+function submitQuiz(event) {
   event.preventDefault();
   gradeQuiz();
   clearInterval(timer);
-  $("#start-button").show();
-  $("#timer").empty();
-  $("#quiz-form").empty();
-});
+  $startBtn.style.display = '';
+  $timerDiv.innerHTML = '';
+  $quizForm.innerHTML = '';
+}
+
+;
 },{"./questions":"assets/javascript/questions.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -347,7 +373,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52343" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61678" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

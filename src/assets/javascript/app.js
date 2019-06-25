@@ -5,10 +5,14 @@ let correct = 0;
 let incorrect = 0;
 let counter = 3 * 60;
 let currentTime;
-let $choice;
 let questionBank = Quiz;
 let timer;
 
+// grab elements on page
+const $timerDiv = document.querySelector("#timer");
+const $resultsDiv = document.querySelector("#results");
+const $startBtn = document.querySelector("#start-button");
+const $quizForm = document.querySelector("#quiz-form");
 
 // create run function
 function run() {
@@ -16,13 +20,13 @@ function run() {
   clearInterval(timer);
 
   // empty timer div
-  $("#timer").empty();
+  $timerDiv.innerHTML = "";
 
   // restart interval
   timer = setInterval(decrement, 1000);
 
   // empty results div
-  $("#results").empty();
+  $resultsDiv.innerHTML = "";
 
   // reset correct and incorrect
   correct = 0;
@@ -32,10 +36,10 @@ function run() {
   counter = 3 * 60;
 
   // print current time to page
-  $("#timer").text(`Time Remaining: 3:00`);
+  $timerDiv.textContent = "Time Remaining: 3:00";
 
   // hide start-quiz button
-  $("#start-button").hide();
+  $startBtn.style.display = "none";
 }
 
 // create decrement function to lower counter by one every second
@@ -47,16 +51,15 @@ function decrement() {
   currentTime = timeConverter($counter);
 
   // print to page
-  $("#timer").text(`Time Remaining: ${currentTime}`);
+  $timerDiv.textContent = `Time Remaining: ${currentTime}`;
 
   // if counter runs out, run gradeQuiz function
   if (counter === 0) {
     gradeQuiz();
     clearInterval(timer);
-    $("#start-button").show();
-    $("#timer").empty();
-
-    $("#quiz-form").empty();
+    $startBtn.style.display = "";
+    $timerDiv.innerHTML = "";
+    $quizForm.innerHTML = "";
   }
 }
 
@@ -78,18 +81,20 @@ function timeConverter(t) {
 // Create quiz creation function for each question in the quiz bank
 function renderQuiz() {
   // clear #quiz-form div
-  $("#quiz-form").empty();
+  $quizForm.innerHTML = "";
 
   // loop through quizBank array
   questionBank.forEach(function(question, index) {
     // create div to hold question
-    var $question = $("<div>").addClass("form-group my-4");
+    const $question = document.createElement("div");
+    $question.classList.add("form-group", "my-4");
 
     // add question to div
-    var $label = $("<h5>")
-      .text(index + 1 + ") " + question.question)
-      .addClass("question")
-      .appendTo($question);
+    const $label = document.createElement("h5");
+    $label.textContent = `${index + 1} ${question.question}`;
+    $label.classList.add("question");
+
+    $question.appendChild($label);
 
     // shuffle answer choices
     question.choices = question.choices.sort(function() {
@@ -99,68 +104,74 @@ function renderQuiz() {
     // create a loop to iterate through quizBank's choices and create radio buttons for each one
     for (var i = 0; i < question.choices.length; i++) {
       // create a div for choice and add bootstrap classes
-      $choice = $("<div>").addClass("form-check");
+      const $choice = document.createElement("div");
+      $choice.classList.add("form-check");
 
       // create an input tag for radio buttons
-      var $radio = $("<input>");
+      const $radio = document.createElement("input");
 
       // add attributes to radio buttons
-      $radio
-        .attr({
-          type: "radio",
-          value: question.choices[i],
-          name: index,
-          class: "form-check-input"
-        })
-        .appendTo($choice);
+      $radio.setAttribute("type", "radio");
+      $radio.setAttribute("value", `${question.choices[i]}`);
+      $radio.setAttribute("name", `${index}`);
+      $radio.classList.add("form-check-input");
 
       // create label to print choice to page
-      var $choiceLabel = $("<label>");
-      $choiceLabel
-        .text(question.choices[i])
-        .addClass("form-check-label")
-        .appendTo($choice);
+      const $choiceLabel = document.createElement("label");
+      $choiceLabel.textContent = `${question.choices[i]}`;
+      $choiceLabel.classList.add("form-check-label");
+
+      $choice.append($radio, $choiceLabel);
 
       // add whole radio button to question
-      $choice.appendTo($question);
+      $question.appendChild($choice);
     }
 
     // add question to page
-    $question.appendTo($("#quiz-form"));
+    $quizForm.appendChild($question);
   });
 
   // create a submit button
-  var $submitBtn = $("<button>");
-  $submitBtn.attr({
-    id: "submit-button",
-    class: "btn btn-success btn-lg col-12 col-md-4 col-lg-3 my-4"
-  });
+  const $submitBtn = document.createElement("button");
+  $submitBtn.setAttribute("id", "submit-button");
+  $submitBtn.classList.add(
+    "btn",
+    "btn-success",
+    "btn-lg",
+    "col-12",
+    "col-md-4",
+    "col-lg-3",
+    "my-4"
+  );
+  $submitBtn.onclick = submitQuiz;
 
-  var $submitBtnSpan = $("<span>")
-    .text("Submit")
-    .appendTo($submitBtn);
+  const $submitBtnSpan = document.createElement('span');
+  $submitBtnSpan.textContent = 'Submit';
 
-  $submitBtn.appendTo($("#quiz-form"));
+  $submitBtn.append($submitBtnSpan);
+  $quizForm.append($submitBtn);
+}
+
+// create function to check which radio btns are checked and update userAnswer in questionBank
+function checkedRadioBtns() {
+  for (let i = 0; i < $quizForm.length; i++) {
+    if ($quizForm[i].checked) {
+      const questionIdx = $quizForm[i].name;
+      const answer = $quizForm[i].value;
+      questionBank[questionIdx].userAnswer = answer;
+    }
+  }
 }
 
 // create a "change" listener for all radio buttons but bind them to quiz-form since it's permanently on the page
-$("#quiz-form").on("change", ".form-check-input", function() {
-  // Get question index out of "name" attribute so we know what question you answered
-  var questionIndex = $(this).attr("name");
-
-  // get value out of radio button you selected
-  var answer = $(this).val();
-
-  // set answer to quizBank's userAnswer property
-  questionBank[questionIndex].userAnswer = answer;
-});
+$quizForm.addEventListener('change', checkedRadioBtns);
 
 function gradeQuiz() {
   // check to see if userAnswer === answer
-  questionBank.forEach((question) => {
-    console.log(question)
-    var $userAnswer = question.userAnswer;
-    var $answer = question.answer;
+  questionBank.forEach(question => {
+    console.log(question);
+    const $userAnswer = question.userAnswer;
+    const $answer = question.answer;
 
     if ($userAnswer === $answer) {
       correct++;
@@ -168,41 +179,51 @@ function gradeQuiz() {
       incorrect++;
 
       // print questions user got wrong and correct answer
-      var $question = $("<h5>").text(`${question.id}) ${question.question}`);
-      var $incorrectAnswer = $("<p>")
-        .addClass("incorrect-answer")
-        .text(`Your Answer: ${$userAnswer}`);
-      var $correctAnswer = $("<p>")
-        .addClass("correct-answer")
-        .text(`Correct Answer: ${$answer}`);
-      $("#results").append($question, $incorrectAnswer, $correctAnswer);
+      const $question = document.createElement('h5');
+      $question.textContent = `${question.id}) ${question.question}`;
+
+      const $incorrectAnswer = document.createElement('p');
+      $incorrectAnswer.classList.add('incorrect-answer');
+      $incorrectAnswer.textContent = `Your Answer: ${$userAnswer}`;
+      
+      const $correctAnswer = document.createElement('p');
+      $correctAnswer.classList.add('correct-answer');
+      $correctAnswer.textContent = `Correct Answer: ${$answer}`;
+
+      $resultsDiv.append($question, $incorrectAnswer, $correctAnswer);
     }
-  })
+  });
 
   // create div to hold results
-  var $results = $("<div>").addClass("mb-5");
+  const $results = document.createElement('div');
+  $results.classList.add('mb-5');
 
   // create h2 for correct and incorrect
-  var $correct = $("<h2>").text(`Correct: ${correct}`);
-  var $incorrect = $("<h2>").text(`Incorrect: ${incorrect}`);
-  var percent = Math.round((correct / questionBank.length) * 100);
-  var $percent = $("<h2>").text(`Percent Correct: ${percent}%`);
+  const $correct = document.createElement('h2');
+  $correct.textContent = `Correct: ${correct}`;
 
+  const $incorrect = document.createElement('h2');
+  $incorrect.textContent = `Correct: ${incorrect}`;
+
+  const percent = Math.round((correct / questionBank.length) * 100);
+  const $percent = document.createElement('h2');
+  $percent.textContent = `Percent Correct: ${percent}%`;
+  
   $results.append($correct, $incorrect, $percent);
 
-  $("#results").prepend($results);
+  $resultsDiv.insertBefore($results, $resultsDiv.firstChild);
 }
 
-$("#start-button").on("click", function() {
+$startBtn.addEventListener('click', function() {
   run();
   renderQuiz();
-});
+})
 
-$(document).on("click", "#submit-button", function(event) {
+function submitQuiz(event) {
   event.preventDefault();
   gradeQuiz();
   clearInterval(timer);
-  $("#start-button").show();
-  $("#timer").empty();
-  $("#quiz-form").empty();
-});
+  $startBtn.style.display = '';
+  $timerDiv.innerHTML = '';
+  $quizForm.innerHTML = '';
+};

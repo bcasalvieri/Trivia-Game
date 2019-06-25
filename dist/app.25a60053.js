@@ -162,7 +162,7 @@ var _questions = require("./questions");
 // create variables
 var correct = 0;
 var incorrect = 0;
-var counter = 3 * 60;
+var counter = 2 * 60;
 var currentTime;
 var questionBank = _questions.Quiz;
 var timer; // grab elements on page
@@ -185,9 +185,9 @@ function run() {
   correct = 0;
   incorrect = 0; // reset counter
 
-  counter = 3 * 60; // print current time to page
+  counter = 2 * 60; // print current time to page
 
-  $timerDiv.textContent = "Time Remaining: 3:00"; // hide start-quiz button
+  $timerDiv.textContent = "Time Remaining: 2:00"; // hide start-quiz button
 
   $startBtn.style.display = "none";
 } // create decrement function to lower counter by one every second

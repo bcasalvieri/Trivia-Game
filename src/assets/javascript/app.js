@@ -3,7 +3,7 @@ import { Quiz } from "./questions";
 // create variables
 let correct = 0;
 let incorrect = 0;
-let counter = 3 * 60;
+let counter = 2 * 60;
 let currentTime;
 let questionBank = Quiz;
 let timer;
@@ -33,10 +33,10 @@ function run() {
   incorrect = 0;
 
   // reset counter
-  counter = 3 * 60;
+  counter = 2 * 60;
 
   // print current time to page
-  $timerDiv.textContent = "Time Remaining: 3:00";
+  $timerDiv.textContent = "Time Remaining: 2:00";
 
   // hide start-quiz button
   $startBtn.style.display = "none";
